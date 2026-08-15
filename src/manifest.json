@@ -1,0 +1,27 @@
+{
+  "name": "Ogame",
+  "description": "Ogame facilitations",
+  "version": "1.0",
+  "manifest_version": 3,
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": "images/logo.png"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "content_scripts": [
+    {
+      "js": ["scripts/content.js"],
+      "matches": [
+        "https://*.ogame.gameforge.com/*"
+      ]
+    },
+    {
+      "js": ["thirdParty/jquery-4.0.0.min.js","scripts/OgameArtefatos.js"],
+      "matches": [
+        "https://*.ogame.gameforge.com/*&component=galaxy*"
+      ]
+    }
+  ]
+}
