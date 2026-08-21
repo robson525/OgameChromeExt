@@ -12,16 +12,28 @@
   ],
   "content_scripts": [
     {
-      "js": ["scripts/content.js"],
       "matches": [
         "https://*.ogame.gameforge.com/*"
-      ]
+      ],
+      "js": ["scripts/content.js"]      
     },
     {
-      "js": ["thirdParty/jquery-4.0.0.min.js","scripts/OgameArtefatos.js"],
       "matches": [
         "https://*.ogame.gameforge.com/*&component=galaxy*"
-      ]
+      ],
+      "js": ["thirdParty/jquery-4.0.0.min.js","scripts/artefatos.js"]
+    },
+    {
+      "matches": [
+        "https://*.ogame.gameforge.com/*&component=trader*"
+      ],
+      "js": ["thirdParty/jquery-4.0.0.min.js", "scripts/globalFunctions.js", "scripts/leilao.js"]      
+    },
+    {
+      "matches": [
+        "https://s181-br.ogame.gameforge.com/game/index.php?page=ingame&component=supplies"
+      ],
+      "js": ["thirdParty/jquery-4.0.0.min.js", "scripts/globalFunctions.js", "scripts/recursos.js"]      
     }
   ]
 }
