@@ -1,32 +1,23 @@
 const resourcesEnergy = parseInt(jQuery("#top #resourcesbarcomponent #resources_energy").html());
 
-function getTechnology(technology) {
-    return jQuery("#suppliescomponent #technologies li.technology." + technology);
-}
-function getTechnologyLevel(technology) {
-    return parseInt(jQuery(technology).find("span.level span.stockAmount").html().trim());
-}
-
-function isTechnologyUpgradeable(technology) {
-    return jQuery(technology).attr("data-status") == "on"
-}
-
-async function upgradeTechnology(technology) {
-     jQuery(technology).find("button.upgrade")[0].click();
-}
-
 async function checkSolarPlant() {
     if(resourcesEnergy < 0) {
         console.log(getTime(), 'Energy resources are negative. Upgrading solar plant...');
         const solarPlant = getTechnology("solarPlant");
         upgradeTechnology(solarPlant);
-        //reloadPage(60);
+        reloadPage(60);
         return true;
     }
     return false;
 }
 
 async function main() {
+
+    await delay(500);
+
+    if(!(await checkPlanetsUpgradeable())) {
+        return;
+    }
 
     if(await checkSolarPlant()) {
         return;

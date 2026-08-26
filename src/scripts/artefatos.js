@@ -1,9 +1,4 @@
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 const getDiscoveryBtns = () => jQuery('#galaxyContent div.galaxyRow.ctContentRow .planetDiscoverIcons a.planetDiscover');
-const getTime = () => {
-    var now = new Date();
-    return now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
-};
 
 const getSytem = () => jQuery('#galaxycomponent #galaxyHeader #system_input').val();
 async function sendAll() {
@@ -64,7 +59,12 @@ async function checkSlots() {
 
 async function start() {
     await delay(1000);
-    console.log(getTime(), "Ogame - Start");
+    if(!ogameExtConfig.findArtifacts) {
+        console.log(getTime(), 'findArtifacts is disabled. Exiting...');
+        return;
+    }
+
+    console.log(getTime(), "Starting the artifact discovery process...");
     checkSlots();
     //setInterval(checkSlots, 1000);
 }

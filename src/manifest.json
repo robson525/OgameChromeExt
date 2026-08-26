@@ -15,25 +15,43 @@
       "matches": [
         "https://*.ogame.gameforge.com/*"
       ],
-      "js": ["scripts/content.js"]      
+      "js": ["thirdParty/jquery-4.0.0.min.js", "scripts/globalFunctions.js", "scripts/configs.js"]      
+    },
+    {
+      "matches": [
+        "https://*.ogame.gameforge.com/*&component=overview*"
+      ],
+      "js": ["scripts/overview.js"]
     },
     {
       "matches": [
         "https://*.ogame.gameforge.com/*&component=galaxy*"
       ],
-      "js": ["thirdParty/jquery-4.0.0.min.js","scripts/artefatos.js"]
+      "js": ["scripts/artefatos.js"]
     },
     {
       "matches": [
         "https://*.ogame.gameforge.com/*&component=trader*"
       ],
-      "js": ["thirdParty/jquery-4.0.0.min.js", "scripts/globalFunctions.js", "scripts/leilao.js"]      
+      "js": ["scripts/leilao.js"]      
     },
     {
       "matches": [
-        "https://s181-br.ogame.gameforge.com/game/index.php?page=ingame&component=supplies"
+        "https://*.ogame.gameforge.com/*&component=supplies*"
       ],
-      "js": ["thirdParty/jquery-4.0.0.min.js", "scripts/globalFunctions.js", "scripts/recursos.js"]      
+      "js": ["scripts/recursos.js"]
+    },
+    {
+      "matches": [
+        "https://*.ogame.gameforge.com/*&component=facilities*"
+      ],
+      "js": ["scripts/instalacoes.js"]
+    },
+    {
+      "matches": [
+        "https://*.ogame.gameforge.com/*&component=lfbuildings*"
+      ],
+      "js": ["scripts/formasDeVida.js"]
     }
   ]
 }

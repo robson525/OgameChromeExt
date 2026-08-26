@@ -15,14 +15,15 @@ async function checkLeilao() {
     const maxBtn = jQuery(metalLine).find("a.js_valButton.max");
     maxBtn[0].click();
     console.log(getTime(),  'Clicked on max button for metal.');
-    await delay(500);
+    
+    await delay(1000);
 
     const submitBtn = jQuery("#div_auctioneer .right_box .pay");
     submitBtn[0].click();
     console.log(getTime(),  'Clicked on submit button for metal.');
 
-    await reloadPage(500);
+    await reloadPage(1000);
 }
 //checkLeilao();
-setInterval(checkLeilao, 5000);
+setInterval(checkLeilao, 10000);
 setInterval(reloadPage, 1000 * 60);
