@@ -1,3 +1,7 @@
+async function reloadLeilao() {
+     await reloadPage(60);
+}
+
 async function checkLeilao() {
 
     const currentPlayer = jQuery("#div_auctioneer .left_box .currentPlayer").html().trim();    
@@ -22,8 +26,8 @@ async function checkLeilao() {
     submitBtn[0].click();
     console.log(getTime(),  'Clicked on submit button for metal.');
 
-    await reloadPage(1000);
+    await reloadPage(1);
 }
 //checkLeilao();
-setInterval(checkLeilao, 10000);
-setInterval(reloadPage, 1000 * 60);
+setInterval(checkLeilao, 5000);
+reloadLeilao();

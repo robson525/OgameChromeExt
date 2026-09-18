@@ -19,6 +19,11 @@ async function saveUpdateLifeForm() {
   await chrome.storage.local.set({ [STORAGE_CONFIGS_ID]: { ...ogameExtConfig, updateLifeForm: configForm.updateLifeForm.checked } });
 }
 
+async function saveAutoLogin() {
+  console.log("Saving autoLogin setting", configForm.autoLogin.checked);
+  await chrome.storage.local.set({ [STORAGE_CONFIGS_ID]: { ...ogameExtConfig, autoLogin: configForm.autoLogin.checked } });
+}
+
 async function loadForm() {
   console.log("Loading form...");
   
@@ -30,6 +35,9 @@ async function loadForm() {
 
   configForm.updateLifeForm.addEventListener("change", saveUpdateLifeForm);
   configForm.updateLifeForm.checked = ogameExtConfig.updateLifeForm || false;
+  
+  configForm.autoLogin.addEventListener("change", saveAutoLogin);
+  configForm.autoLogin.checked = ogameExtConfig.autoLogin || false;
 }
 
 async function loadConfigs() {

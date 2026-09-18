@@ -45,7 +45,8 @@ async function checkSlots() {
             await checkSlots();
         } else {
             console.log(getTime(),  'Going to the next system ...');
-            jQuery('#galaxycomponent #galaxyHeader span.next')[1].click();
+            //jQuery('#galaxycomponent #galaxyHeader span.next')[1].click();
+            jQuery('#galaxycomponent #galaxyHeader span.prev')[1].click();
             await delay(1000);
             await checkSlots();
         }        

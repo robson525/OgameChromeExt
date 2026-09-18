@@ -1,4 +1,4 @@
-const planetsUpgradeList = ["Picon"];
+const planetsUpgradeList = [];
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 const getTime = () => {
@@ -49,3 +49,46 @@ async function checkPlanetsUpgradeable(){
     }
     return isUpgradeable;
 }
+
+async function goToPlanet(planetName){
+    const planet = jQuery("#planetList div.smallplanet .planet-name").filter(function() {
+        return jQuery(this).html().trim() === planetName;
+    }).first();
+    if(planet.length > 0) {
+        console.log(getTime(), 'Navigating to planet: ' + planetName);
+        planet.parent()[0].click();
+    } else {
+        console.log(getTime(), 'Planet not found: ' + planetName);
+    }
+}
+
+async function checkAtack(){
+    const attackAlert = jQuery("#pageContent #top #notificationbarcomponent #attack_alert");
+    if(attackAlert.length > 0) {
+        console.log(getTime(), 'Attack alert detected!');
+        const currentPlanet = await getHightlightPlanetName();
+
+        const planetAlert = jQuery("#planetList div.smallplanet .ogi-planet_alert");
+        for(let i = 0; i < planetAlert.length; i++) {
+            const planet = planetAlert[i];
+            const planetName = jQuery(planet).parent().find(".planet-name").html().trim();
+            const planetkoords = jQuery(planet).parent().find(".planet-koords").html().trim();
+            console.log(getTime(), 'Planet alert detected: ' + planetName + ' (' + planetkoords + ')');
+            
+            if(currentPlanet == planetName) {
+                console.log(getTime(), 'Current planet is under attack: ' + currentPlanet);
+                // Add any additional logic for handling the current planet under attack here.
+            }
+            else {
+                // await goToPlanet(planetName);
+                break;
+            }
+        }
+    }   
+}
+
+async function main() {
+    await delay(2000);
+    await checkAtack();
+}
+main();
