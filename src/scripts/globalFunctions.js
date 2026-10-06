@@ -1,4 +1,4 @@
-const planetsUpgradeList = [];
+const planetsUpgradeList = ["Main"];
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 const getTime = () => {
@@ -32,7 +32,12 @@ async function upgradeTechnology(technology) {
 }
 
 async function getHightlightPlanet(){
-    return jQuery("#planetList div.hightlightPlanet");
+    const planets = jQuery("#planetList a.planetlink");
+    if(planets.length > 1) {
+        return jQuery("#planetList div.hightlightPlanet");
+    } else {
+         return jQuery(jQuery("#planetList div.smallplanet")[0]);
+    }
 }
 async function getHightlightPlanetName(){
     const currentPlanet = await getHightlightPlanet();
