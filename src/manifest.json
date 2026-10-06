@@ -8,14 +8,15 @@
     "default_icon": "images/logo.png"
   },
   "permissions": [
-    "storage"
+    "storage",
+    "activeTab"
   ],
   "content_scripts": [
     {
       "matches": [
         "https://*.ogame.gameforge.com/*"
       ],
-      "js": ["thirdParty/jquery-4.0.0.min.js", "scripts/configs.js", "scripts/globalFunctions.js"]      
+      "js": ["thirdParty/jquery-4.0.0.min.js", "scripts/globalFunctions.js", "scripts/configs.js"]      
     },
     {
       "matches": [

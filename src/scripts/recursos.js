@@ -15,6 +15,11 @@ async function main() {
 
     await delay(500);
 
+    if(!ogameExtConfig.updateSupplies){
+        console.log(getTime(), 'Update supplies is disabled.');
+        return;
+    }
+
     if(!(await checkPlanetsUpgradeable())) {
         return;
     }
@@ -36,7 +41,7 @@ async function main() {
 
     if(metalMineLevel <= crystalMineLevel && isTechnologyUpgradeable(metalMine)) {
         await upgradeTechnology(metalMine);
-    } else if(crystalMineLevel <= deuteriumSynthesizerLevel && isTechnologyUpgradeable(crystalMine)) {
+    } else if(isTechnologyUpgradeable(crystalMine)) {
         await upgradeTechnology(crystalMine);
     } else if(isTechnologyUpgradeable(deuteriumSynthesizer)) {
         await upgradeTechnology(deuteriumSynthesizer);
