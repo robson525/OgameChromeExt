@@ -16,7 +16,10 @@
       "matches": [
         "https://*.ogame.gameforge.com/*"
       ],
-      "js": ["thirdParty/jquery-4.0.0.min.js", "scripts/globalFunctions.js", "scripts/configs.js"]      
+      "js": [
+        "thirdParty/jquery-4.0.0.min.js", 
+        "scripts/globalFunctions.js", 
+        "scripts/configs.js"]      
     },
     {
       "matches": [
@@ -34,7 +37,10 @@
       "matches": [
         "https://*.ogame.gameforge.com/*&component=galaxy*"
       ],
-      "js": ["scripts/artefatos.js"]
+      "js": [
+        "scripts/artefatos.js",
+        "scripts/frota/frotaEspionar.js"
+      ]
     },
     {
       "matches": [
@@ -59,6 +65,16 @@
         "https://*.ogame.gameforge.com/*&component=lfbuildings*"
       ],
       "js": ["scripts/formasDeVida.js"]
+    },
+    {
+      "matches": [
+        "https://*.ogame.gameforge.com/*&component=fleetdispatch*"
+      ],
+      "js": [
+        "scripts/frota/frotaRecursos.js", 
+        "scripts/frota/frotaAtacar.js", 
+        "scripts/frota/frotaEspionar.js",
+        "scripts/frota/frota.js"]
     }
   ]
 }

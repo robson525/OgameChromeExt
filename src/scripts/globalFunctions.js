@@ -31,8 +31,12 @@ async function upgradeTechnology(technology) {
      upgradeButton[0].click();
 }
 
+async function getPlanets(){
+    return jQuery("#planetList a.planetlink");
+}
+
 async function getHightlightPlanet(){
-    const planets = jQuery("#planetList a.planetlink");
+    const planets = await getPlanets();
     if(planets.length > 1) {
         return jQuery("#planetList div.hightlightPlanet");
     } else {
@@ -70,9 +74,7 @@ async function goToPlanet(planetName){
 async function checkAtack(){
     const attackAlert = jQuery("#pageContent #top #notificationbarcomponent #attack_alert");
     if(attackAlert.length > 0) {
-        console.log(getTime(), 'Attack alert detected!');
         const currentPlanet = await getHightlightPlanetName();
-
         const planetAlert = jQuery("#planetList div.smallplanet .ogi-planet_alert");
         for(let i = 0; i < planetAlert.length; i++) {
             const planet = planetAlert[i];

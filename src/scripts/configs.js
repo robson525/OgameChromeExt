@@ -29,6 +29,36 @@ async function saveAutoLogin() {
   await chrome.storage.local.set({ [STORAGE_CONFIGS_ID]: { ...ogameExtConfig, autoLogin: configForm.autoLogin.checked } });
 }
 
+async function saveSendResources(sendResources) {
+  await chrome.storage.local.set({ [STORAGE_CONFIGS_ID]: { ...ogameExtConfig, sendResources: sendResources } });
+}
+
+async function sendResources() {
+  console.log("Sending resources...");
+
+  saveSendResources({ enabled: true });
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  const newUrl = new URL(tab.url).origin + "/game/index.php?page=ingame&component=fleetdispatch";
+  await chrome.tabs.create({ url: newUrl });
+}
+
+
+async function saveSpy(spy) {
+  await chrome.storage.local.set({ [STORAGE_CONFIGS_ID]: { ...ogameExtConfig, spy: spy } });
+}
+async function saveAttack(attack) {
+  await chrome.storage.local.set({ [STORAGE_CONFIGS_ID]: { ...ogameExtConfig, attack: attack } });
+}
+
+async function spyAndAttack() {
+  console.log("Espionage and Attacking...");
+  saveAttack({ enabled: false });
+  saveSpy({ enabled: true });
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  const newUrl = new URL(tab.url).origin + "/game/index.php?page=ingame&component=fleetdispatch";
+  await chrome.tabs.create({ url: newUrl });
+}
+
 async function loadForm() {
   console.log("Loading form...");
   
@@ -46,6 +76,9 @@ async function loadForm() {
   
   configForm.autoLogin.addEventListener("change", saveAutoLogin);
   configForm.autoLogin.checked = ogameExtConfig.autoLogin || false;
+
+  configForm.btnSendResources.addEventListener("click", sendResources);
+  configForm.btnSpyAttack.addEventListener("click", spyAndAttack);
 }
 
 async function loadConfigs() {
