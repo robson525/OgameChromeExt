@@ -13,8 +13,6 @@ async function checkSolarPlant() {
 
 async function main() {
 
-    await delay(500);
-
     if(!ogameExtConfig.updateSupplies){
         console.log(getTime(), 'Update supplies is disabled.');
         return;
@@ -56,5 +54,3 @@ async function main() {
         await reloadPage(60 * 60);
     }
 }
-
-main();

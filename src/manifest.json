@@ -75,6 +75,12 @@
         "scripts/frota/frotaAtacar.js", 
         "scripts/frota/frotaEspionar.js",
         "scripts/frota/frota.js"]
+    },
+    {
+      "matches": [
+        "https://*.ogame.gameforge.com/*&component=messages*"
+      ],
+      "js": ["scripts/frota/frotaAtacar.js"]
     }
   ]
 }

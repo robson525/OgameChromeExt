@@ -17,9 +17,7 @@ async function getPlanetObj(planet) {
     };
 }
 
-async function main() {
-    await delay(500);
-
+async function main() {    
     if(ogameExtConfig.sendResources && ogameExtConfig.sendResources.enabled) {
         await sendResources();
     } else if(ogameExtConfig.spy && ogameExtConfig.spy.enabled) {
@@ -30,5 +28,3 @@ async function main() {
         console.log("No attack action configured.");
     }
 }
-
-main();

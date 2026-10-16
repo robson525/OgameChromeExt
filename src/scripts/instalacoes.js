@@ -10,8 +10,6 @@ async function updateRoboticsFactory() {
 
 async function main() {
 
-    await delay(500);
-
     if(!(await checkPlanetsUpgradeable())) {
         return;
     }
@@ -25,5 +23,3 @@ async function main() {
 
     await reloadPage(60 * 60);
 }
-
-main();

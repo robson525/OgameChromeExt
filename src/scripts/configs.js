@@ -4,6 +4,10 @@ const ogameExtConfig = {};
 
 const configForm = document.getElementById("configForm");
 
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const currentView = urlParams.get("component");
+
 async function saveFindArtifacts() {
   console.log("Saving findArtifacts setting", configForm.findArtifacts.checked);
   await chrome.storage.local.set({ [STORAGE_CONFIGS_ID]: { ...ogameExtConfig, findArtifacts: configForm.findArtifacts.checked } });
@@ -29,8 +33,9 @@ async function saveAutoLogin() {
   await chrome.storage.local.set({ [STORAGE_CONFIGS_ID]: { ...ogameExtConfig, autoLogin: configForm.autoLogin.checked } });
 }
 
-async function saveSendResources(sendResources) {
-  await chrome.storage.local.set({ [STORAGE_CONFIGS_ID]: { ...ogameExtConfig, sendResources: sendResources } });
+async function saveSendResources(newSendResources) {
+  ogameExtConfig.sendResources = newSendResources;
+  await chrome.storage.local.set({ [STORAGE_CONFIGS_ID]: { ...ogameExtConfig, sendResources: newSendResources } });
 }
 
 async function sendResources() {
@@ -43,20 +48,31 @@ async function sendResources() {
 }
 
 
-async function saveSpy(spy) {
-  await chrome.storage.local.set({ [STORAGE_CONFIGS_ID]: { ...ogameExtConfig, spy: spy } });
+async function saveSpy(newSpy) {
+  ogameExtConfig.spy = newSpy;
+  await chrome.storage.local.set({ [STORAGE_CONFIGS_ID]: { ...ogameExtConfig, spy: newSpy } });
 }
-async function saveAttack(attack) {
-  await chrome.storage.local.set({ [STORAGE_CONFIGS_ID]: { ...ogameExtConfig, attack: attack } });
+async function saveAttack(newAttack) {
+  ogameExtConfig.attack = newAttack;
+  await chrome.storage.local.set({ [STORAGE_CONFIGS_ID]: { ...ogameExtConfig, attack: newAttack } });
+}
+async function saveSpyAndAttack(newSpyAndAttack) {
+  ogameExtConfig.spyAndAttack = newSpyAndAttack;
+  await chrome.storage.local.set({ [STORAGE_CONFIGS_ID]: { ...ogameExtConfig, spyAndAttack: newSpyAndAttack } });
 }
 
 async function spyAndAttack() {
   console.log("Espionage and Attacking...");
+  ogameExtConfig.attack = { enabled: false };
   saveAttack({ enabled: false });
   saveSpy({ enabled: true });
+  saveSpyAndAttack(true);
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   const newUrl = new URL(tab.url).origin + "/game/index.php?page=ingame&component=fleetdispatch";
   await chrome.tabs.create({ url: newUrl });
+
+  const data = await chrome.storage.local.get([STORAGE_CONFIGS_ID]);
+  console.log("Spy and Attack sequence initiated.", ogameExtConfig, data[STORAGE_CONFIGS_ID]);
 }
 
 async function loadForm() {
@@ -114,7 +130,14 @@ async function loadConfigs() {
   console.log("Loaded ogameExtConfig:", ogameExtConfig);
   if (configForm) {
     await loadForm();
-  }  
+  }
+
+  if (typeof delay === "function") {
+    await delay(500);
+  }
+  if (typeof main === "function") {
+    await main();
+  }
 }
 
 loadConfigs();

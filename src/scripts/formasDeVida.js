@@ -1,6 +1,6 @@
 async function updateLifeForm() {
-    const mainHouse = getTechnology("lifeformTech14101");
-    const foodFactory = getTechnology("lifeformTech14102");
+    const mainHouse = getTechnology("lifeformTech11101");
+    const foodFactory = getTechnology("lifeformTech11102");
 
     const mainHouseLevel = getTechnologyLevel(mainHouse);
     const foodFactoryLevel = getTechnologyLevel(foodFactory );
@@ -20,8 +20,6 @@ async function updateLifeForm() {
 
 async function main() {
 
-    await delay(500);
-
     if(!(await checkPlanetsUpgradeable())) {
         return;
     }
@@ -35,5 +33,3 @@ async function main() {
 
     await reloadPage(60 * 60);
 }
-
-main();

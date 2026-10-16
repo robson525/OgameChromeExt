@@ -1,8 +1,11 @@
 let fleetSideStalk;
-let currentView;
 
 async function loadSideStalk() {
-    fleetSideStalk = jQuery("#pageContent #left #toolbarcomponent .ogl-sideStalk");
+    let tries = 0;
+    do {
+        fleetSideStalk = jQuery("#pageContent #left #toolbarcomponent .ogl-sideStalk");
+        await delay(500);
+    } while(fleetSideStalk.length == 0 && ++tries < 10);
 }
 
 async function showSideStalk() {
@@ -107,6 +110,13 @@ async function spyGalaxyPlanets() {
     await spy();
 }
 
+async function init() {
+    if(!ogameExtConfig.spy.playersAlreadySpyed)
+        ogameExtConfig.spy.playersAlreadySpyed = [];
+    if(!ogameExtConfig.spy.planetsAlreadySpyed)
+        ogameExtConfig.spy.planetsAlreadySpyed = [];
+}
+
 async function spy() {
     console.log(getTime(),  "Espionage...");
     await loadSideStalk();
@@ -116,6 +126,7 @@ async function spy() {
         return;
     }
 
+    await init();
     await showSideStalk();
     await selectPlayer();
     await selectPlanet();
@@ -123,23 +134,11 @@ async function spy() {
 }
 
 async function main() {
-    if(ogameExtConfig.spy && ogameExtConfig.spy.enabled){
-        if(!ogameExtConfig.spy.playersAlreadySpyed)
-            ogameExtConfig.spy.playersAlreadySpyed = [];
-        if(!ogameExtConfig.spy.planetsAlreadySpyed)
-            ogameExtConfig.spy.planetsAlreadySpyed = [];
-    }
-
-    if(window.location.href.includes("&component=galaxy")) {
-        currentView = "galaxy";
-        await delay(500);
+    if(currentView == "galaxy") {
+        await init();
         if(ogameExtConfig.spy && ogameExtConfig.spy.enabled) {
             console.log(getTime(), "Starting espionage in galaxy view.");
             await spyGalaxyPlanets();
         }
-    }
-    else if(window.location.href.includes("&component=fleetdispatch")) {
-        currentView = "fleetdispatch";
-    }    
+    }   
 }
-main();
