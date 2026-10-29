@@ -10,7 +10,7 @@ async function updateRoboticsFactory() {
 
 async function main() {
 
-    if(!(await checkPlanetsUpgradeable())) {
+    if(!(await isCurrentPlanetInUpgradeList())) {
         return;
     }
     

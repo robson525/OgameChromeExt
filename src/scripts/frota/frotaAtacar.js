@@ -44,6 +44,14 @@ async function choosePlaned() {
         return;
     }
 
+    const cargo = parseInt(row.find("td.ogl-cargo-choice")[0].innerText);
+    if(cargo < 10) {
+        console.log("Cargo too small.");
+        await deleteMessage(row);
+        await choosePlaned();
+        return;
+    }
+
     ogameExtConfig.attack.enabled = true;
     saveAttack(ogameExtConfig.attack);
     row.find("td.ogl-cargo-choice a")[0].click();
@@ -73,8 +81,23 @@ async function attack() {
     console.log("Attacking...");
     await delay(1000);
 
-    jQuery("#pageContent #allornone #continueToFleet2")[0].click();
+    const continuesBtn = jQuery("#pageContent #allornone #continueToFleet2");
+    if(continuesBtn.hasClass("off"))
+    {
+        console.log("Continue button is off. Aborting attack.");
+        await reloadPage(60);
+        return;
+    }
+
+    continuesBtn[0].click();
     await delay(1000);
+
+    const sendFleetButton = jQuery("#pageContent #naviActions #sendFleet");
+    if(sendFleetButton.hasClass("off")) {
+        console.log("Send fleet button is off. Aborting attack.");
+        await reloadPage(60);
+        return;
+    }
 
     const coords = jQuery("#pageContent #fleetboxdestination #target .coords");
     const galaxy = coords.find("#galaxy").val();
@@ -87,7 +110,7 @@ async function attack() {
     ogameExtConfig.attack.enabled = false;
     saveAttack(ogameExtConfig.attack);
 
-    jQuery("#pageContent #naviActions #sendFleet")[0].click();
+    sendFleetButton[0].click();
 }
 
 async function main() {

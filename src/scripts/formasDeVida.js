@@ -1,6 +1,13 @@
 async function updateLifeForm() {
-    const mainHouse = getTechnology("lifeformTech11101");
-    const foodFactory = getTechnology("lifeformTech11102");
+
+    const technologies = jQuery("#technologies li.technology");
+    if(technologies.length < 0) {
+        console.log(getTime(), 'No technologies found.');
+        return;
+    }
+
+    const mainHouse = technologies[0];
+    const foodFactory = technologies[1];
 
     const mainHouseLevel = getTechnologyLevel(mainHouse);
     const foodFactoryLevel = getTechnologyLevel(foodFactory );
@@ -19,10 +26,6 @@ async function updateLifeForm() {
 }
 
 async function main() {
-
-    if(!(await checkPlanetsUpgradeable())) {
-        return;
-    }
     
     if(ogameExtConfig.updateLifeForm) {
         console.log(getTime(), 'updateLifeForm is enabled. Proceeding...');

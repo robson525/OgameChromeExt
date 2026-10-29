@@ -4,11 +4,35 @@ async function checkSolarPlant() {
     if(resourcesEnergy < 0) {
         console.log(getTime(), 'Energy resources are negative. Upgrading solar plant...');
         const solarPlant = getTechnology("solarPlant");
-        upgradeTechnology(solarPlant);
-        reloadPage(60);
-        return true;
+
+        if(isTechnologyUpgradeable(solarPlant)) {
+            upgradeTechnology(solarPlant);
+            reloadPage(60);
+            return true;
+        }
+        console.log(getTime(), 'Solar plant is not upgradeable.');
     }
     return false;
+}
+
+async function goToTheNextUpgradeablePlanet(upgradeablePlanets) {
+    const planetsNames = await getPlanetsNames();
+    const currentPlanet = await getHightlightPlanetName();
+    const currentPlanetIndex = planetsNames.indexOf(currentPlanet);
+
+    for(let i = currentPlanetIndex + 1; i < planetsNames.length; i++) {
+        if(upgradeablePlanets.includes(planetsNames[i])) {
+            await delay(5000);
+            await goToPlanet(planetsNames[i]);
+            return;
+        }
+    }
+    if(currentPlanet != upgradeablePlanets[0]) {
+        await delay(5000);
+        await goToPlanet(upgradeablePlanets[0]);
+    } else {
+        console.log(getTime(), 'No upgradeable planets to navigate to.');
+    }
 }
 
 async function main() {
@@ -18,7 +42,7 @@ async function main() {
         return;
     }
 
-    if(!(await checkPlanetsUpgradeable())) {
+    if(!(await isCurrentPlanetInUpgradeList())) {
         return;
     }
 
@@ -50,7 +74,14 @@ async function main() {
     } else if(isTechnologyUpgradeable(deuteriumStorage)) {
         await upgradeTechnology(deuteriumStorage);
     } else {
-        console.log(getTime(), 'No technology is upgradeable.');
-        await reloadPage(60 * 60);
+        console.log(getTime(), 'No technology is upgradeable.');        
+        const upgradeablePlanets = await getPlanetsUpgradeable(".icon_wrench");        
+        if(upgradeablePlanets.length > 0) {
+            await goToTheNextUpgradeablePlanet(upgradeablePlanets);
+        }
+        else {
+            console.log(getTime(), 'No upgradeable planets found.');
+        }        
+        await reloadPage(60 * 10);
     }
 }

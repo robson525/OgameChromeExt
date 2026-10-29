@@ -1,4 +1,4 @@
-const planetsUpgradeList = ["Main", "Colonia1", "Colonia2", "Colonia3"];
+const planetsUpgradeList = ["Colonia5"];
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 const getTime = () => {
@@ -35,6 +35,17 @@ async function getPlanets(){
     return jQuery("#planetList a.planetlink");
 }
 
+async function getPlanetsNames(){
+    const planets = await getPlanets();
+    const planetNames = [];
+    for(let i = 0; i < planets.length; i++) {
+        const planet = jQuery(planets[i]);
+        const planetName = planet.find(".planet-name").html().trim();
+        planetNames.push(planetName);
+    }
+    return planetNames;
+}
+
 async function getHightlightPlanet(){
     const planets = await getPlanets();
     if(planets.length > 1) {
@@ -48,7 +59,7 @@ async function getHightlightPlanetName(){
     return currentPlanet.find(".planet-name").html().trim();
 }
 
-async function checkPlanetsUpgradeable(){
+async function isCurrentPlanetInUpgradeList(){
     const currentPlanet = await getHightlightPlanetName();
     const isUpgradeable = planetsUpgradeList.includes(currentPlanet);
     if(isUpgradeable) {
@@ -57,6 +68,25 @@ async function checkPlanetsUpgradeable(){
         console.log(getTime(), 'Current planet is not in the upgrade list. Exiting...');
     }
     return isUpgradeable;
+}
+
+async function getPlanetsUpgradeable(icon){
+    const planets = await getPlanets();
+    const upgradeablePlanets = [];
+    for(let i = 0; i < planets.length; i++) {
+        const planet = jQuery(planets[i]);
+        const planetName = planet.find(".planet-name").html().trim();
+        if(planetsUpgradeList.includes(planetName)) {
+            const constructionIcons = planet.parent().find("div.constructionIcons a.constructionIcon " + icon);
+            if(constructionIcons.length > 0) {
+                //console.log(getTime(), 'Construction in progress on planet: ' + planetName);
+            } else {
+                upgradeablePlanets.push(planetName);
+                //console.log(getTime(), 'No construction in progress on planet: ' + planetName);
+            }            
+        }
+    }
+    return upgradeablePlanets;
 }
 
 async function goToPlanet(planetName){

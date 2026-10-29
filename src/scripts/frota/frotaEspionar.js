@@ -24,6 +24,11 @@ async function disableSply() {
     saveSpy({enabled: false});
 }
 
+async function goToMessages() {
+    console.log(getTime(), "Going to messages...");
+    jQuery("#pageContent #newmessagesindicatorcomponent div.messagesIndicator")[0].click();
+}
+
 async function selectPlayer() {
     if(ogameExtConfig.spy.currentPlayer){
         console.log(getTime(), "Current player:", ogameExtConfig.spy.currentPlayer);
@@ -46,6 +51,7 @@ async function selectPlayer() {
     if(ogameExtConfig.spy.playersAlreadySpyed.includes(lastPlayerName)) {
         console.log(getTime(), "All Players Already spied. Disabling spy ...");
         await disableSply();
+        await goToMessages();
         return;
     }
 
@@ -59,7 +65,7 @@ async function selectPlayer() {
 async function selectPlanet() {
     let planets;
     do {
-        planets = fleetSideStalk.find(".ogl-stalkPlanets .ogl-planet-div").parent();
+        planets = fleetSideStalk.find(".ogl-stalkPlanets a").not(".ogl-deleted").find(".ogl-planet-div").parent();
         await delay(1000);
     } while(planets.length == 0);
     
