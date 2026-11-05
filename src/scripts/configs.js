@@ -85,7 +85,7 @@ async function spyAndAttack() {
   saveSpy({ enabled: true });
   saveSpyAndAttack(true);
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  const newUrl = new URL(tab.url).origin + "/game/index.php?page=ingame&component=fleetdispatch";
+  const newUrl = new URL(tab.url).origin + "/game/index.php?page=ingame&component=galaxy";
   await chrome.tabs.create({ url: newUrl });
 
   const data = await chrome.storage.local.get([STORAGE_CONFIGS_ID]);

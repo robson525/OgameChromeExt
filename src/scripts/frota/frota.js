@@ -24,6 +24,12 @@ async function main() {
         await spy();
     } else if(ogameExtConfig.attack && ogameExtConfig.attack.enabled) {
         await attack();
+    } else if(ogameExtConfig.attack && ogameExtConfig.attack.justAttacked && currentView == "fleetdispatch") {
+        console.log(getTime(), "Just attacked a planet. Waiting before next attack.");
+        ogameExtConfig.attack.justAttacked = false;
+        saveAttack(ogameExtConfig.attack);
+        await delay(1000);
+        jQuery("#pageContent #newmessagesindicatorcomponent .messagesIndicator")[0].click();        
     } else {
         console.log("No attack action configured.");
     }

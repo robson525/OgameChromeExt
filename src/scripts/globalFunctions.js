@@ -124,6 +124,16 @@ async function checkAtack(){
     }   
 }
 
+async function goToView(view){
+    const viewButton = jQuery("#pageContent #left #toolbarcomponent ul li a span.textlabel:contains('" + view + "')");
+    if(viewButton.length > 0) {
+        console.log(getTime(), 'Navigating to view: ' + view);
+        viewButton[0].click();
+    } else {
+        console.log(getTime(), 'View not found: ' + view);
+    }
+}
+
 async function main() {
     await delay(2000);
     await checkAtack();

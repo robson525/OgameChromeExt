@@ -56,6 +56,9 @@ async function sendShips() {
     console.log(getTime(), 'All resources loaded.');
     await delay(500);
 
+    jQuery("#pageContent #fleetboxmission ul#missions li.ipiHintable a span.textlabel:contains('Transportar')").parent()[0].click();
+    await delay(500);
+    
     jQuery("#pageContent #fleetdispatchcomponent #sendFleet")[0].click();
     console.log(getTime(), 'Fleet sent.');
 }

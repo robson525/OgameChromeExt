@@ -108,6 +108,7 @@ async function attack() {
     console.log("Attacking planet coordinates: " + planetCoords);
     ogameExtConfig.attack.planetsAlreadyAttacked.push(planetCoords);
     ogameExtConfig.attack.enabled = false;
+    ogameExtConfig.attack.justAttacked = true;
     saveAttack(ogameExtConfig.attack);
 
     sendFleetButton[0].click();
@@ -119,16 +120,15 @@ async function main() {
         console.log(getTime(), "SpyAndAttack enabled.");
         
         if(!ogameExtConfig.attack.planetsAlreadyAttacked)
-            ogameExtConfig.attack.planetsAlreadyAttacked = [];        
+            ogameExtConfig.attack.planetsAlreadyAttacked = [];
 
         if(currentView == "messages") {
             ogameExtConfig.attack.enabled = false;
             saveAttack(ogameExtConfig.attack);
-
             await delay(2000);
             await loadSpyMessages();
-        } else {
-            saveAttack(ogameExtConfig.attack);
+        } else 
         }
+        saveAttack(ogameExtConfig.attack);
     }
 }
