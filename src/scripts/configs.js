@@ -1,5 +1,9 @@
-var STORAGE_CONFIGS_ID = "ogame.galaxy.ogameExtConfig";
+const STORAGE_CONFIGS_BASE = "ogame.galaxy.ogameExtConfig";
+var STORAGE_CONFIGS_ID = STORAGE_CONFIGS_BASE;
+var universeId = null;
+var universeName = null;
 
+const ogameLoginConfig = {};
 const ogameExtConfig = {};
 
 const configForm = document.getElementById("configForm");
@@ -7,6 +11,24 @@ const configForm = document.getElementById("configForm");
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const currentView = urlParams.get("component");
+
+async function saveAutoLogin() {
+  console.log("Saving autoLogin setting", configForm.autoLogin.checked);
+  if(ogameLoginConfig.autoLogin === undefined) {
+    ogameLoginConfig.autoLogin = [];
+  }
+  if(configForm.autoLogin.checked) {
+    if(!(ogameLoginConfig.autoLogin.includes(universeName))) {
+      ogameLoginConfig.autoLogin.push(universeName);
+    }
+  } else {
+    const index = ogameLoginConfig.autoLogin.indexOf(universeName);
+    if(index > -1) {
+      ogameLoginConfig.autoLogin.splice(index, 1);
+    }
+  }
+  await chrome.storage.local.set({ [STORAGE_CONFIGS_BASE]: ogameLoginConfig });
+}
 
 async function saveFindArtifacts() {
   console.log("Saving findArtifacts setting", configForm.findArtifacts.checked);
@@ -26,11 +48,6 @@ async function saveUpdateRoboticsFactory() {
 async function saveUpdateLifeForm() {
   console.log("Saving updateLifeForm setting", configForm.updateLifeForm.checked);
   await chrome.storage.local.set({ [STORAGE_CONFIGS_ID]: { ...ogameExtConfig, updateLifeForm: configForm.updateLifeForm.checked } });
-}
-
-async function saveAutoLogin() {
-  console.log("Saving autoLogin setting", configForm.autoLogin.checked);
-  await chrome.storage.local.set({ [STORAGE_CONFIGS_ID]: { ...ogameExtConfig, autoLogin: configForm.autoLogin.checked } });
 }
 
 async function saveSendResources(newSendResources) {
@@ -77,6 +94,9 @@ async function spyAndAttack() {
 
 async function loadForm() {
   console.log("Loading form...");
+
+  configForm.autoLogin.addEventListener("change", saveAutoLogin);
+  configForm.autoLogin.checked = ogameLoginConfig.autoLogin?.includes(universeName) || false;
   
   configForm.findArtifacts.addEventListener("change", saveFindArtifacts);
   configForm.findArtifacts.checked = ogameExtConfig.findArtifacts || false;
@@ -89,9 +109,6 @@ async function loadForm() {
 
   configForm.updateLifeForm.addEventListener("change", saveUpdateLifeForm);
   configForm.updateLifeForm.checked = ogameExtConfig.updateLifeForm || false;
-  
-  configForm.autoLogin.addEventListener("change", saveAutoLogin);
-  configForm.autoLogin.checked = ogameExtConfig.autoLogin || false;
 
   configForm.btnSendResources.addEventListener("click", sendResources);
   configForm.btnSpyAttack.addEventListener("click", spyAndAttack);
@@ -105,7 +122,7 @@ async function loadConfigs() {
     var disableConfigForm = false;
     if(URL.canParse(tab.url)){
       url = new URL(tab.url);
-      if(!url.hostname.includes("ogame")) {        
+      if(!url.hostname.includes("ogame") || url.hostname.includes("lobby")) {        
         disableConfigForm = true;     
       }
     } else {
@@ -113,19 +130,29 @@ async function loadConfigs() {
     }
 
     if(disableConfigForm) {
-      console.log("Not an Ogame TAB");
+      console.log("Not a Valid Ogame TAB");
       configForm.hidden = true;
       return;
     }
+
+    console.log("Current TAB:", tab);
+    universeName = tab.title.trim();
   } else {
       url = new URL (window.location.href);
+      universeName = document.title.trim();
   }
-  const universe = url.hostname.split('.')[0];
-  STORAGE_CONFIGS_ID += "." + universe;
+
+  universeId = url.hostname.split('.')[0];
+  STORAGE_CONFIGS_ID += "." + universeId;
+
+  console.log("Current Universe:", universeName, universeId);
 
   console.log("Loading ogameExtConfig...");
   const data = await chrome.storage.local.get([STORAGE_CONFIGS_ID]);
   Object.assign(ogameExtConfig, data[STORAGE_CONFIGS_ID]);
+
+  const loginData = await chrome.storage.local.get([STORAGE_CONFIGS_BASE]);
+  Object.assign(ogameLoginConfig, loginData[STORAGE_CONFIGS_BASE]);
 
   console.log("Loaded ogameExtConfig:", ogameExtConfig);
   if (configForm) {
