@@ -127,8 +127,8 @@ async function main() {
             saveAttack(ogameExtConfig.attack);
             await delay(2000);
             await loadSpyMessages();
-        } else 
+        } else {
+            saveAttack(ogameExtConfig.attack);
         }
-        saveAttack(ogameExtConfig.attack);
     }
 }

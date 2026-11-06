@@ -7,10 +7,10 @@ async function checkSolarPlant() {
 
         if(isTechnologyUpgradeable(solarPlant)) {
             upgradeTechnology(solarPlant);
-            reloadPage(60);
-            return true;
         }
         console.log(getTime(), 'Solar plant is not upgradeable.');
+        await reloadPage(60 * 5);
+        return true;
     }
     return false;
 }
@@ -61,11 +61,11 @@ async function main() {
     const crystalMineLevel = getTechnologyLevel(crystalMine);
     const deuteriumSynthesizerLevel = getTechnologyLevel(deuteriumSynthesizer);
 
-    if(metalMineLevel <= crystalMineLevel && isTechnologyUpgradeable(metalMine)) {
+    if(metalMineLevel <= (crystalMineLevel + 2) && isTechnologyUpgradeable(metalMine)) {
         await upgradeTechnology(metalMine);
-    } else if(isTechnologyUpgradeable(crystalMine)) {
+    } else if(crystalMineLevel <= (deuteriumSynthesizerLevel + 3) && isTechnologyUpgradeable(crystalMine)) {
         await upgradeTechnology(crystalMine);
-    } else if(isTechnologyUpgradeable(deuteriumSynthesizer)) {
+    } else if(deuteriumSynthesizerLevel < crystalMineLevel && isTechnologyUpgradeable(deuteriumSynthesizer)) {
         await upgradeTechnology(deuteriumSynthesizer);
     } else if(isTechnologyUpgradeable(metalStorage)) {
         await upgradeTechnology(metalStorage);
@@ -82,6 +82,6 @@ async function main() {
         else {
             console.log(getTime(), 'No upgradeable planets found.');
         }        
-        await reloadPage(60 * 10);
+        await reloadPage(60);
     }
 }

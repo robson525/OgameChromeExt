@@ -1,4 +1,4 @@
-const planetsUpgradeList = ["Colonia5"];
+const planetsUpgradeList = ["Colonia5", "Illidan"];
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 const getTime = () => {
