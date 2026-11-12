@@ -16,11 +16,17 @@ async function reloadPage(seconds) {
 function getTechnology(technology) {
     return jQuery("#technologies li.technology." + technology);
 }
+function getTechnologyName(technology) {
+    return jQuery(technology).attr("aria-label").trim();
+}
 function getTechnologyLevel(technology) {
-    return parseInt(jQuery(technology).find("span.level span.stockAmount").html().trim());
+    return parseInt(jQuery(technology).find("span.level span.stockAmount").html());
+}
+function getTechnologyStatus(technology) {
+    return jQuery(technology).attr("data-status").trim();
 }
 function isTechnologyUpgradeable(technology) {
-    return jQuery(technology).attr("data-status") == "on"
+    return getTechnologyStatus(technology) == "on"
 }
 async function upgradeTechnology(technology) {
      const upgradeButton = jQuery(technology).find("button.upgrade");

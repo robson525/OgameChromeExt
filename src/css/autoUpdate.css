@@ -1,0 +1,39 @@
+#pageContent #middle #technologies ul li.technology span.icon {
+    
+    .upgrade-btn {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        z-index: 10;
+        transition: background-color 0.2s;
+    }
+    
+    .upgrade-btn.enabled {
+        background-color: #4CAF50;
+    }
+
+    .upgrade-btn.disabled {
+        background-color: #f44336;
+    }
+
+    .upgrade-btn.enabled:hover {
+        background-color: #83d187;
+    }
+
+    .upgrade-btn.disabled:hover {
+        background-color: #f44336;
+    }
+}

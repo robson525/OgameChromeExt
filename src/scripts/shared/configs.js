@@ -165,6 +165,9 @@ async function loadConfigs() {
   if (typeof main === "function") {
     await main();
   }
+  if (typeof autoUpdate === "function") {
+    await autoUpdate();
+  }
 }
 
 loadConfigs();

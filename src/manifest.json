@@ -18,8 +18,11 @@
       ],
       "js": [
         "thirdParty/jquery-4.0.0.min.js", 
-        "scripts/globalFunctions.js", 
-        "scripts/configs.js"]      
+        "scripts/shared/globalFunctions.js", 
+        "scripts/autoUpdate/autoUpdate.js",
+        "scripts/shared/configs.js"        
+      ],
+      "css": ["css/autoUpdate.css"]
     },
     {
       "matches": [
