@@ -31,7 +31,7 @@ function isTechnologyUpgradeable(technology) {
 async function upgradeTechnology(technology) {
      const upgradeButton = jQuery(technology).find("button.upgrade");
      if(upgradeButton.length === 0) {
-        console.log(getTime(), 'Upgrade button not found for technology:');
+        console.log(getTime(), 'Upgrade button not found for technology:', technology);
         return;
      }
      upgradeButton[0].click();

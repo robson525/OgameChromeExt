@@ -55,7 +55,7 @@
       "matches": [
         "https://*.ogame.gameforge.com/*&component=supplies*"
       ],
-      "js": ["scripts/recursos.js"]
+      "js": ["scripts/autoUpdate/autoUpdateRecursos.js"]
     },
     {
       "matches": [

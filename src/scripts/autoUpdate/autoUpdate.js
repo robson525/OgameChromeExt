@@ -1,54 +1,68 @@
-async function getTechnologyObj(technology) {
+let autoUpdateList = [];
+
+function getTechnologyObj(technology) {
+    const name = getTechnologyName(technology);
+    const level = getTechnologyLevel(technology);
+    const status = getTechnologyStatus(technology);
+    const isUpgradeable = isTechnologyUpgradeable(technology);
+    const isInAutoUpdateList = checkAutoUpdateList(name);
     return {
-        name: getTechnologyName(technology),
-        level: getTechnologyLevel(technology),
-        status: getTechnologyStatus(technology),
-        isUpgradeable: isTechnologyUpgradeable(technology)
+        name: name,
+        level: level,
+        status: status,
+        isUpgradeable: isUpgradeable && isInAutoUpdateList,
+        isInAutoUpdateList: isInAutoUpdateList,
+        technology: technology
     };
 }
 
-async function getTechnologyObjByBtn(btn) {
+function getTechnologyObjByClass(className) {
+    const technology = getTechnology(className);
+    return getTechnologyObj(technology);
+}
+
+function getTechnologyObjByBtn(btn) {
     const technology = jQuery(btn).closest('li.technology');
-    return await getTechnologyObj(technology);
+    return getTechnologyObj(technology);
+}
+
+function checkAutoUpdateList(technologyName) {
+    return autoUpdateList.includes(technologyName);
 }
 
 async function autoUpdateClick(btn) {
     const technology = await getTechnologyObjByBtn(btn);
-    let autoUpdate = ogameExtConfig.autoUpdate[currentView];
     console.log('Auto-Update button clicked: ', technology.name);
 
-    if(autoUpdate.includes(technology.name)) {
+    if(checkAutoUpdateList(technology.name)) {
         console.log('Removing technology from auto-upgrade list:', technology.name);
-        autoUpdate = autoUpdate.filter(t => t !== technology.name);
+        autoUpdateList = autoUpdateList.filter(t => t !== technology.name);
         btn.text('-');
         btn.addClass('disabled');
         btn.removeClass('enabled');
     } else {
         console.log('Adding technology to auto-upgrade list:', technology.name);
-        autoUpdate.push(technology.name);
+        autoUpdateList.push(technology.name);
         btn.text('+');
         btn.removeClass('disabled');
         btn.addClass('enabled');
     }
 
-    ogameExtConfig.autoUpdate[currentView] = autoUpdate;
+    ogameExtConfig.autoUpdate[currentView] = autoUpdateList;
     await chrome.storage.local.set({ [STORAGE_CONFIGS_ID]: { ...ogameExtConfig, autoUpdate: ogameExtConfig.autoUpdate } });
 }
 
-async function loadAutoUpdate() {
-    let autoUpdate = ogameExtConfig.autoUpdate[currentView];
-    
+async function loadAutoUpdateIcons() {    
     const technologiesIcons = jQuery('#pageContent #middle #technologies ul li.technology span.icon');
     
-    technologiesIcons.each(async function() {
-        const technology = await getTechnologyObjByBtn(this);
+    technologiesIcons.each(function() {
+        const technology = getTechnologyObjByBtn(this);
         if(technology.status === "off") {
             return;
         }
 
-        const technologyIncluded = autoUpdate.includes(technology.name);
-        const text = technologyIncluded ? "+" : "-";
-        const className = technologyIncluded ? "enabled" : "disabled";
+        const text = technology.isInAutoUpdateList ? "+" : "-";
+        const className = technology.isInAutoUpdateList ? "enabled" : "disabled";
         
         const upgradeButton = jQuery('<button>', {
             class: 'upgrade-btn ' + className,
@@ -65,15 +79,26 @@ async function loadAutoUpdate() {
     });
 }
 
+async function loadAutoUpdateView() {
+   if (typeof checkAutoUpdateView === "function") {
+        console.log(getTime(), "Loading auto-update view ...");
+        await checkAutoUpdateView();
+   } else {
+         console.log(getTime(), "No auto-update view function defined for this page.");
+   }
+}
+
 async function autoUpdate() {
 
     if(["shipyard", "defenses", "fleetdispatch"].includes(currentView)) {
         console.log(getTime(), "Auto-update skipped.");
         return;
     }
-    console.log(getTime(), "Checking for auto-updates...");
+    console.log(getTime(), "Loading auto-update ...");
     ogameExtConfig.autoUpdate = ogameExtConfig.autoUpdate || {};
     ogameExtConfig.autoUpdate[currentView] = ogameExtConfig.autoUpdate[currentView] || [];
+    autoUpdateList = ogameExtConfig.autoUpdate[currentView];
 
-    await loadAutoUpdate();
+    await loadAutoUpdateIcons();
+    await loadAutoUpdateView();
 }
